@@ -1,0 +1,25 @@
+{
+  "name": "@morten-olsen/mini-loader-examples",
+  "version": "1.0.0",
+  "main": "./dist/esm/index.js",
+  "types": "./dist/esm/index.d.ts",
+  "scripts": {
+    "build": "tsc --build"
+  },
+  "type": "module",
+  "files": [
+    "./dist"
+  ],
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.js"
+    }
+  },
+  "devDependencies": {
+    "@morten-olsen/mini-loader-configs": "workspace:^",
+    "@morten-olsen/mini-loader-cli": "workspace:^",
+    "@morten-olsen/mini-loader": "workspace:^",
+    "@types/node": "^20.10.8",
+    "typescript": "^5.3.3"
+  }
+}

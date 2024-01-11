@@ -1,0 +1,9 @@
+version: '3'
+services:
+  server:
+    image: 'ghcr.io/morten-olsen/mini-loader:latest'
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile
+    ports:
+      - 4500:4500
