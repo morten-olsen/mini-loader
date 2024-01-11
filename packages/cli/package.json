@@ -1,0 +1,42 @@
+{
+  "name": "@morten-olsen/mini-loader-cli",
+  "version": "1.0.0",
+  "main": "./dist/esm/index.js",
+  "types": "./dist/esm/index.d.ts",
+  "bin": {
+    "mini-loader": "./bin/index.mjs"
+  },
+  "scripts": {
+    "build": "tsc --build"
+  },
+  "type": "module",
+  "files": [
+    "./dist"
+  ],
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.js"
+    }
+  },
+  "dependencies": {
+    "@rollup/plugin-auto-install": "^3.0.5",
+    "@rollup/plugin-commonjs": "^25.0.7",
+    "@rollup/plugin-json": "^6.1.0",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-replace": "^5.0.5",
+    "@rollup/plugin-sucrase": "^5.0.2",
+    "@trpc/client": "^10.45.0",
+    "commander": "^11.1.0",
+    "ora": "^8.0.1",
+    "rollup": "^4.9.4",
+    "rollup-plugin-node-polyfills": "^0.2.1",
+    "source-map-support": "^0.5.21",
+    "superjson": "^2.2.1"
+  },
+  "devDependencies": {
+    "@morten-olsen/mini-loader-configs": "workspace:^",
+    "@morten-olsen/mini-loader-runner": "workspace:^",
+    "@morten-olsen/mini-loader-server": "workspace:^",
+    "typescript": "^5.3.3"
+  }
+}
