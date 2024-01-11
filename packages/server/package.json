@@ -1,0 +1,42 @@
+{
+  "name": "@morten-olsen/mini-loader-server",
+  "version": "1.0.0",
+  "main": "./dist/esm/index.js",
+  "types": "./dist/esm/index.d.ts",
+  "bin": {
+    "mini-loader-server": "./bin/index.mjs"
+  },
+  "scripts": {
+    "build": "tsc --build"
+  },
+  "type": "module",
+  "files": [
+    "./dist"
+  ],
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.js"
+    }
+  },
+  "devDependencies": {
+    "@morten-olsen/mini-loader-configs": "workspace:^",
+    "@morten-olsen/mini-loader-runner": "workspace:^",
+    "@types/jsonwebtoken": "^9.0.5",
+    "@types/node": "^20.10.8",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "@trpc/client": "^10.45.0",
+    "@trpc/server": "^10.45.0",
+    "commander": "^11.1.0",
+    "eventemitter3": "^5.0.1",
+    "fastify": "^4.25.2",
+    "jsonwebtoken": "^9.0.2",
+    "knex": "^3.1.0",
+    "nanoid": "^5.0.4",
+    "source-map-support": "^0.5.21",
+    "sqlite3": "^5.1.7",
+    "superjson": "^2.2.1",
+    "zod": "^3.22.4"
+  }
+}
