@@ -1,0 +1,124 @@
+name: Node.js Package
+
+on:
+  push:
+  pull_request:
+    types: [opened]
+  # release:
+  #   types: [created]
+
+env:
+  NODE_CACHE: 'pnpm'
+  NODE_VERSION: '20.x'
+  NODE_SCOPE: '@bob-the-algorithm'
+  NPM_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+permissions:
+  contents: read
+  packages: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: corepack enable
+      - uses: actions/setup-node@v3
+        with:
+          cache: '${{ env.NODE_CACHE }}'
+          node-version: '${{ env.NODE_VERSION }}'
+          registry-url: '${{ env.NODE_REGISTRY_URL }}'
+          scope: '${{ env.NODE_SCOPE }}'
+
+      - run: |
+          pnpm install
+          pnpm run build
+        env:
+          ASSET_URL: https://mortenolsen.pro/bob/
+      - uses: actions/upload-artifact@v3
+        with:
+          name: lib
+          retention-days: 5
+          path: |
+            packages/*/dist
+            packages/*/package.json
+            package.json
+            README.md
+
+  update-release-draft:
+    if: github.ref == 'refs/heads/main'
+    needs: build
+    permissions:
+      contents: write
+      pull-requests: write
+      packages: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: release-drafter/release-drafter@v5
+        with:
+          config-name: release-drafter-config.yml
+          publish: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  release-docker:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    needs: [build, update-release-draft]
+    permissions:
+      packages: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Log in to the Container registry
+        uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+      - name: Build and push Docker image
+        uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
+        with:
+          context: .
+          file: ./docker/Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+  # release-npm:
+  #   if: github.ref == 'refs/heads/main'
+  #   runs-on: ubuntu-latest
+  #   needs: [build, update-release-draft]
+  #   permissions:
+  #     contents: read
+  #     packages: write
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #       with:
+  #         fetch-depth: 0
+  #     - run: corepack enable
+  #     - uses: actions/setup-node@v3
+  #       with:
+  #         cache: '${{ env.NODE_CACHE }}'
+  #         node-version: '${{ env.NODE_VERSION }}'
+  #         scope: '${{ env.NODE_SCOPE }}'
+  #     - uses: actions/download-artifact@v3
+  #       with:
+  #         name: lib
+  #         path: ./
+  #     - run: |
+  #         pnpm config set //registry.npmjs.org/:_authToken ${NPM_TOKEN}
+  #         pnpm install
+  #         git config user.name "Github Actions Bot"
+  #         git config user.email "<>"
+  #         node scripts/set-version.ts $(git describe --tag --abbrev=0)
+  #         pnpm publish -r --publish-branch main --access public --no-git-checks
+  #       env:
+  #         NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

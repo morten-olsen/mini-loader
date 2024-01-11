@@ -1,0 +1,23 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "pipeline": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**"],
+      "inputs": ["src/**/*.tsx", "src/**/*.ts", "./tsconfig.*"]
+    },
+    "test": {
+      "cache": false
+    },
+    "clean": {},
+    "dev": {
+      "dependsOn": ["^build"],
+      "cache": false
+    },
+    "start": {
+      "dependsOn": ["^build", "build"],
+      "outputs": ["dist/**"],
+      "inputs": ["src/**/*.tsx", "src/**/*.ts", "./tsconfig.*"]
+    }
+  }
+}
