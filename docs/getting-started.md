@@ -1,0 +1,1 @@
+[Next: create a workload](./first-workload.md)
