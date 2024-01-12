@@ -1,0 +1,27 @@
+{
+  "name": "@morten-olsen/mini-loader-repo",
+  "private": "true",
+  "packageManager": "pnpm@8.10.4",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "turbo build",
+    "build:dev": "tsc --build --watch",
+    "test:lint": "eslint ./packages/*/src",
+    "test": "pnpm run test:lint"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@react-native-community/eslint-config": "^3.2.0",
+    "eslint": "^8.53.0",
+    "prettier": "^2.8.8",
+    "turbo": "^1.10.16",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "@pnpm/find-workspace-packages": "^6.0.9",
+    "@types/node": "^20.10.8",
+    "ts-node": "^10.9.2"
+  }
+}

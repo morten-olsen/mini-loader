@@ -1,0 +1,17 @@
+{
+  "include": [],
+  "references": [
+    {
+      "path": "./packages/runner/tsconfig.json"
+    },
+    {
+      "path": "./packages/server/tsconfig.json"
+    },
+    {
+      "path": "./packages/mini-loader/tsconfig.json"
+    },
+    {
+      "path": "./packages/cli/tsconfig.json"
+    },
+  ],
+}
