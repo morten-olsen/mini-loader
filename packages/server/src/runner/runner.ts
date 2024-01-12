@@ -36,6 +36,10 @@ class Runner {
     this.#instances.set(args.id, instance);
     await instance.start();
   };
+
+  public getInstance = (id: string) => {
+    return this.#instances.get(id);
+  };
 }
 
 export { Runner };

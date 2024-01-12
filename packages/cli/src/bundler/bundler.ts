@@ -17,12 +17,12 @@ const bundle = async ({ entry, autoInstall }: BundleOptions) => {
   const entryFile = resolve(entry);
   const codeBundler = await rollup({
     plugins: [
+      fix(json)(),
       fix(sucrase)({
         transforms: ['typescript', 'jsx'],
       }),
       ...[autoInstall ? fix(auto) : []],
-      nodeResolve({ extensions: ['.js', '.jsx', '.ts', '.tsx'] }),
-      fix(json)(),
+      nodeResolve({ preferBuiltins: true, extensions: ['.js', '.jsx', '.ts', '.tsx'] }),
       fix(commonjs)({ include: /node_modules/ }),
     ],
     input: entryFile,

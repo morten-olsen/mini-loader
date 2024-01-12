@@ -25,7 +25,7 @@ push
     const code = await step('Bundling', async () => {
       return await bundle({ entry: location, autoInstall: opts.autoInstall });
     });
-    const id = await step('Creating load', async () => {
+    const id = await step(`Creating load ${(code.length / 1024).toFixed(0)}`, async () => {
       return await client.loads.set.mutate({
         id: opts.id,
         name: opts.name,
@@ -34,9 +34,10 @@ push
     });
     console.log('created load with id', id);
     if (opts.run) {
-      await step('Creating run', async () => {
-        await client.runs.create.mutate({ loadId: id });
+      const runId = await step('Creating run', async () => {
+        return await client.runs.create.mutate({ loadId: id });
       });
+      console.log('created run with id', runId);
     }
   });
 

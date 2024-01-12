@@ -17,12 +17,12 @@
     }
   },
   "devDependencies": {
-    "@morten-olsen/mini-loader": "workspace:^",
     "@morten-olsen/mini-loader-configs": "workspace:^",
     "@types/node": "^20.10.8",
     "typescript": "^5.3.3"
   },
   "dependencies": {
+    "@morten-olsen/mini-loader": "workspace:^",
     "eventemitter3": "^5.0.1",
     "nanoid": "^5.0.4"
   },

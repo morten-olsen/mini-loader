@@ -18,9 +18,9 @@
     }
   },
   "devDependencies": {
-    "@morten-olsen/mini-loader-configs": "workspace:^",
-    "@morten-olsen/mini-loader-cli": "workspace:^",
     "@morten-olsen/mini-loader": "workspace:^",
+    "@morten-olsen/mini-loader-cli": "workspace:^",
+    "@morten-olsen/mini-loader-configs": "workspace:^",
     "@types/node": "^20.10.8",
     "typescript": "^5.3.3"
   },
@@ -28,5 +28,8 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/morten-olsen/mini-loader"
+  },
+  "dependencies": {
+    "fastify": "^4.25.2"
   }
 }
