@@ -30,7 +30,7 @@ Get up and running with mini loader in just a few steps:
 3. **Push Your First Load**: `mini-loader loads push script.mjs -r -i first`
 3. **See the logs**: `mini-loader logs ls -l first`
 
-For a detailed guide on getting started, please refer to our [Getting Started Tutorial](./docs/getting-started.md).
+For a detailed guide on getting started, please refer to the [Getting Started Tutorial](./docs/getting-started.md).
 
 ## Support and Contributions
 
@@ -41,7 +41,7 @@ If you encounter any issues or would like to contribute to the project, please c
 
 ## License
 
-mini loader is open-source software licensed under the [MIT License](./LICENSE).
+mini loader is open-source software licensed under the [GPL-3 License](./LICENSE).
 
 ## Let's Get Started!
 
