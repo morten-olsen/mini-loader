@@ -56,8 +56,9 @@ class LogRepo extends EventEmitter<LogRepoEvents> {
       query.whereIn('severity', options.severities);
     }
 
-    const ids = await query;
-    const token = ids.map((id) => Buffer.from(id.id).toString('base64')).join('|');
+    const result = await query;
+    const ids = result.map((row) => row.id);
+    const token = ids.map((id) => Buffer.from(id).toString('base64')).join('|');
     const hash = createHash('sha256').update(token).digest('hex');
     return {
       ids,

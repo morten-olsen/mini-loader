@@ -18,6 +18,13 @@ class ArtifactRepo extends EventEmitter<ArtifactRepoEvents> {
     this.#options = options;
   }
 
+  public get = async (id: string) => {
+    const { database } = this.#options;
+    const db = await database.instance;
+    const result = await db('artifacts').where({ id }).first();
+    return result || null;
+  };
+
   public add = async (options: AddArtifactOptions) => {
     const { database } = this.#options;
     const db = await database.instance;
@@ -59,8 +66,9 @@ class ArtifactRepo extends EventEmitter<ArtifactRepoEvents> {
       query.limit(options.limit);
     }
 
-    const ids = await query;
-    const token = ids.map((id) => Buffer.from(id.id).toString('base64')).join('|');
+    const result = await query;
+    const ids = result.map((row) => row.id);
+    const token = ids.map((id) => Buffer.from(id).toString('base64')).join('|');
     const hash = createHash('sha256').update(token).digest('hex');
     return {
       ids,

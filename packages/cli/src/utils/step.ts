@@ -4,10 +4,10 @@ const step = async <T>(message: string, fn: () => Promise<T>): Promise<T> => {
   const spinner = ora(message).start();
   try {
     const result = await fn();
-    spinner.succeed();
+    await spinner.succeed();
     return result;
   } catch (err) {
-    spinner.fail();
+    await spinner.fail();
     throw err;
   }
 };

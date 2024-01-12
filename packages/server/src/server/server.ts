@@ -10,6 +10,19 @@ const createServer = async (runtime: Runtime) => {
     return { hello: 'world' };
   });
 
+  server.get('/health', async (req) => {
+    let authorized = false;
+    try {
+      const { authorization } = req.headers;
+      if (authorization) {
+        const [, token] = authorization.split(' ');
+        await runtime.auth.validateToken(token);
+        authorized = true;
+      }
+    } catch (error) {}
+    return { authorized, status: 'ok' };
+  });
+
   server.register(fastifyTRPCPlugin, {
     prefix: '/trpc',
     trpcOptions: {

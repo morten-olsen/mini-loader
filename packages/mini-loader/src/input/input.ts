@@ -1,7 +1,14 @@
-import { workerData } from 'worker_threads';
+import { existsSync } from 'fs';
+import { readFile } from 'fs/promises';
 
-const get = <T>() => {
-  return workerData as T;
+const path = process.env.INPUT_PATH;
+const hasInput = path ? existsSync(path) : false;
+
+const get = () => {
+  if (!hasInput || !path) {
+    return undefined;
+  }
+  return readFile(path, 'utf-8');
 };
 
 const input = {

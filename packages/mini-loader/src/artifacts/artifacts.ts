@@ -8,8 +8,8 @@ type ArtifactCreateEvent = {
   };
 };
 
-const create = (name: string, data: Buffer | string) => {
-  send({
+const create = async (name: string, data: Buffer | string) => {
+  await send({
     type: 'artifact:create',
     payload: {
       name,

@@ -14,7 +14,8 @@ const createContext = async ({ runtime }: ContextOptions) => {
     if (!authorization) {
       throw new Error('No authorization header');
     }
-    await auth.validateToken(authorization);
+    const [, token] = authorization.split(' ');
+    await auth.validateToken(token);
     return {
       runtime,
     };

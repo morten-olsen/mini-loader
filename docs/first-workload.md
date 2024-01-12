@@ -15,14 +15,19 @@ npm install -g @morten-olsen/mini-loader-cli
 Now, let's write a basic script that outputs a single artifact named “hello”. Create a new file with the following JavaScript code:
 
 ```javascript
-import { artifacts } from "@morten-olsen/mini-loader";
+import { artifacts } from '@morten-olsen/mini-loader';
 
-artifacts.create('hello', 'world');
+const run = async () => {
+  artifacts.create('hello', 'world');
+};
+
+run();
 ```
 
-Save this file as `script.mjs`.
+Save this file as `script.js`.
 
 #### A Note on Dependencies
+
 In this script, we're using the `@morten-olsen/mini-loader` package, which might not be installed in your local environment. No worries though, as mini loader can automatically download necessary packages when preparing the script. Alternatively, for a more structured approach (especially if you're using TypeScript), you can initialize a Node.js project and install the dependencies for complete access to typings.
 
 ### Step 3: Run the Script Locally
@@ -30,7 +35,7 @@ In this script, we're using the `@morten-olsen/mini-loader` package, which might
 To validate that your script is functioning correctly, execute it locally using the following command:
 
 ```bash
-mini-loader local run script.mjs -ai
+mini-loader local run script.js -ai
 ```
 
 The `-ai` flag instructs the CLI to automatically download any referenced packages when bundling the script.

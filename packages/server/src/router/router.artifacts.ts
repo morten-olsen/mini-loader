@@ -11,12 +11,21 @@ const find = publicProcedure.input(findArtifactsSchema).query(async ({ input, ct
   return result;
 });
 
+const get = publicProcedure.input(z.string()).query(async ({ input, ctx }) => {
+  const { runtime } = ctx;
+  const { repos } = runtime;
+  const { artifacts } = repos;
+
+  const result = await artifacts.get(input);
+  return result;
+});
+
 const prepareRemove = publicProcedure.input(findArtifactsSchema).query(async ({ input, ctx }) => {
   const { runtime } = ctx;
   const { repos } = runtime;
   const { artifacts } = repos;
 
-  await artifacts.prepareRemove(input);
+  return await artifacts.prepareRemove(input);
 });
 
 const remove = publicProcedure
@@ -35,6 +44,7 @@ const remove = publicProcedure
   });
 
 const artifactsRouter = router({
+  get,
   find,
   remove,
   prepareRemove,

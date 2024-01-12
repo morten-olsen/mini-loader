@@ -27,5 +27,9 @@ program.addCommand(createToken);
 
 await program.parseAsync(process.argv);
 
+process.on('unhandledRejection', (reason, p) => {
+  console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
+});
+
 export type { Runtime } from './runtime/runtime.js';
 export type { RootRouter } from './router/router.js';

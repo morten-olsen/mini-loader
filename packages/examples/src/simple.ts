@@ -1,5 +1,8 @@
 import { artifacts, logger } from '@morten-olsen/mini-loader';
 
-logger.info('Hello world');
+const run = async () => {
+  await logger.info('Hello world');
+  await artifacts.create('foo', 'bar');
+};
 
-artifacts.create('foo', 'bar');
+run();

@@ -16,7 +16,7 @@ const prepareRemove = publicProcedure.input(findLogsSchema).query(async ({ input
   const { repos } = runtime;
   const { logs } = repos;
 
-  await logs.prepareRemove(input);
+  return await logs.prepareRemove(input);
 });
 
 const remove = publicProcedure

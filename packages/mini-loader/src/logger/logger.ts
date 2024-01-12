@@ -9,31 +9,31 @@ type LoggerEvent = {
   };
 };
 
-const sendLog = (event: LoggerEvent['payload']) => {
-  send({
+const sendLog = async (event: LoggerEvent['payload']) => {
+  await send({
     type: 'log',
     payload: event,
   });
 };
 
-const info = (message: string, data?: unknown) => {
-  sendLog({
+const info = async (message: string, data?: unknown) => {
+  await sendLog({
     severity: 'info',
     message,
     data,
   });
 };
 
-const warn = (message: string, data?: unknown) => {
-  sendLog({
+const warn = async (message: string, data?: unknown) => {
+  await sendLog({
     severity: 'warning',
     message,
     data,
   });
 };
 
-const error = (message: string, data?: unknown) => {
-  sendLog({
+const error = async (message: string, data?: unknown) => {
+  await sendLog({
     severity: 'error',
     message,
     data,
