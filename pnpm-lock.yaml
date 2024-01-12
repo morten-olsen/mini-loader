@@ -36,6 +36,9 @@ importers:
 
   packages/cli:
     dependencies:
+      '@morten-olsen/mini-loader-runner':
+        specifier: workspace:^
+        version: link:../runner
       '@rollup/plugin-auto-install':
         specifier: ^3.0.5
         version: 3.0.5(rollup@4.9.4)
@@ -85,9 +88,6 @@ importers:
       '@morten-olsen/mini-loader-configs':
         specifier: workspace:^
         version: link:../configs
-      '@morten-olsen/mini-loader-runner':
-        specifier: workspace:^
-        version: link:../runner
       '@morten-olsen/mini-loader-server':
         specifier: workspace:^
         version: link:../server
