@@ -1,10 +1,6 @@
 
 
-<p>
-<center>
-    <img src="./assets/logo.png" width="300" height="300" />
-</center>
-</p>
+![banner](./assets/banner.png)
 
 # Welcome to Mini Loader! 🌐
 
