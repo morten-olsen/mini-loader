@@ -3,9 +3,16 @@ import fastify from 'fastify';
 import { RootRouter, rootRouter } from '../router/router.js';
 import { createContext } from '../router/router.utils.js';
 import { Runtime } from '../runtime/runtime.js';
+import { gateway } from '../gateway/gateway.js';
 
 const createServer = async (runtime: Runtime) => {
-  const server = fastify({});
+  const server = fastify({
+    maxParamLength: 10000,
+    bodyLimit: 30 * 1024 * 1024,
+    logger: {
+      level: 'warn',
+    },
+  });
   server.get('/', async () => {
     return { hello: 'world' };
   });
@@ -32,6 +39,14 @@ const createServer = async (runtime: Runtime) => {
         console.error(error);
       },
     } satisfies FastifyTRPCPluginOptions<RootRouter>['trpcOptions'],
+  });
+
+  server.register(gateway, {
+    runtime,
+  });
+
+  server.addHook('onError', async (request, reply, error) => {
+    console.error(error);
   });
   await server.ready();
 

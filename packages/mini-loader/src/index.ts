@@ -8,3 +8,4 @@ export { logger } from './logger/logger.js';
 export { artifacts } from './artifacts/artifacts.js';
 export { input } from './input/input.js';
 export { secrets } from './secrets/secrets.js';
+export { http } from './http/http.js';

@@ -3,6 +3,7 @@ import { EventEmitter } from 'eventemitter3';
 import { Database } from '../../database/database.js';
 import { CreateRunOptions, FindRunsOptions, UpdateRunOptions } from './runs.schemas.js';
 import { LoadRepo } from '../loads/loads.js';
+import { createHash } from 'crypto';
 
 type RunRepoEvents = {
   created: (args: { id: string; loadId: string }) => void;
@@ -18,13 +19,22 @@ type RunRepoOptions = {
 
 class RunRepo extends EventEmitter<RunRepoEvents> {
   #options: RunRepoOptions;
+  #isReady: Promise<void>;
 
   constructor(options: RunRepoOptions) {
     super();
     this.#options = options;
+    this.#isReady = this.#setup();
   }
 
+  #setup = async () => {
+    const { database } = this.#options;
+    const db = await database.instance;
+    await db('runs').update({ status: 'failed', error: 'server was shut down' }).where({ status: 'running' });
+  };
+
   public getById = async (id: string) => {
+    await this.#isReady;
     const { database } = this.#options;
     const db = await database.instance;
 
@@ -36,6 +46,7 @@ class RunRepo extends EventEmitter<RunRepoEvents> {
   };
 
   public getByLoadId = async (loadId: string) => {
+    await this.#isReady;
     const { database } = this.#options;
     const db = await database.instance;
 
@@ -44,6 +55,7 @@ class RunRepo extends EventEmitter<RunRepoEvents> {
   };
 
   public find = async (options: FindRunsOptions) => {
+    await this.#isReady;
     const { database } = this.#options;
     const db = await database.instance;
     const query = db('runs').select(['id', 'status', 'startedAt', 'status', 'error', 'endedAt']);
@@ -62,19 +74,41 @@ class RunRepo extends EventEmitter<RunRepoEvents> {
     return runs;
   };
 
-  public remove = async (options: FindRunsOptions) => {
+  public prepareRemove = async (options: FindRunsOptions) => {
+    await this.#isReady;
     const { database } = this.#options;
     const db = await database.instance;
-    const query = db('runs');
+    const query = db('runs').select('id');
 
     if (options.loadId) {
       query.where({ loadId: options.loadId });
     }
 
-    await query.del();
+    const result = await query;
+    const ids = result.map((row) => row.id);
+    const token = ids.map((id) => Buffer.from(id).toString('base64')).join('|');
+    const hash = createHash('sha256').update(token).digest('hex');
+    return {
+      ids,
+      hash,
+    };
+  };
+
+  public remove = async (hash: string, ids: string[]) => {
+    const { database } = this.#options;
+    const db = await database.instance;
+    const token = ids.map((id) => Buffer.from(id).toString('base64')).join('|');
+    const actualHash = createHash('sha256').update(token).digest('hex');
+
+    if (hash !== actualHash) {
+      throw new Error('Invalid hash');
+    }
+
+    await db('runs').whereIn('id', ids).delete();
   };
 
   public started = async (id: string) => {
+    await this.#isReady;
     const { database } = this.#options;
     const db = await database.instance;
     const current = await this.getById(id);
@@ -92,6 +126,7 @@ class RunRepo extends EventEmitter<RunRepoEvents> {
   };
 
   public finished = async (id: string, options: UpdateRunOptions) => {
+    await this.#isReady;
     const { database } = this.#options;
     const db = await database.instance;
     const { loadId } = await this.getById(id);
@@ -114,6 +149,7 @@ class RunRepo extends EventEmitter<RunRepoEvents> {
   };
 
   public create = async (options: CreateRunOptions) => {
+    await this.#isReady;
     const { database, loads } = this.#options;
     const id = nanoid();
     const db = await database.instance;

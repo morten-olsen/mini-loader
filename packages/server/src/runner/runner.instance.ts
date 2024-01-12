@@ -1,5 +1,5 @@
 import { EventEmitter } from 'eventemitter3';
-import { run } from '@morten-olsen/mini-loader-runner';
+import { RunInfo, run } from '@morten-olsen/mini-loader-runner';
 import { Repos } from '../repos/repos.js';
 import { LoggerEvent } from '../../../mini-loader/dist/esm/logger/logger.js';
 import { ArtifactCreateEvent } from '../../../mini-loader/dist/esm/artifacts/artifacts.js';
@@ -20,10 +20,15 @@ type RunnerInstanceOptions = {
 
 class RunnerInstance extends EventEmitter<RunnerInstanceEvents> {
   #options: RunnerInstanceOptions;
+  #run?: RunInfo;
 
   constructor(options: RunnerInstanceOptions) {
     super();
     this.#options = options;
+  }
+
+  public get run() {
+    return this.#run;
   }
 
   #addLog = async (event: LoggerEvent['payload']) => {
@@ -58,11 +63,13 @@ class RunnerInstance extends EventEmitter<RunnerInstanceEvents> {
       const script = await readFile(scriptLocation, 'utf-8');
       const allSecrets = await secrets.getAll();
       await runs.started(id);
-      const { promise, emitter } = await run({
+      const current = await run({
         script,
         secrets: allSecrets,
         input,
       });
+      this.#run = current;
+      const { promise, emitter } = current;
       emitter.on('message', (message) => {
         switch (message.type) {
           case 'log': {
@@ -84,9 +91,11 @@ class RunnerInstance extends EventEmitter<RunnerInstanceEvents> {
       }
       await runs.finished(id, { status: 'failed', error: errorMessage });
     } finally {
+      this.#run = undefined;
       this.emit('completed', { id });
     }
   };
 }
 
+export type { RunInfo };
 export { RunnerInstance };
