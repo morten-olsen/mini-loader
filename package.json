@@ -1,6 +1,7 @@
 {
   "name": "@morten-olsen/mini-loader-repo",
   "private": "true",
+  "license": "GPL-3.0",
   "packageManager": "pnpm@8.10.4",
   "version": "1.0.0",
   "scripts": {
@@ -11,7 +12,6 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
   "devDependencies": {
     "@react-native-community/eslint-config": "^3.2.0",
     "eslint": "^8.53.0",
@@ -23,5 +23,10 @@
     "@pnpm/find-workspace-packages": "^6.0.9",
     "@types/node": "^20.10.8",
     "ts-node": "^10.9.2"
+  },
+  "homepage": "https://github.com/morten-olsen/mini-loader",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/morten-olsen/mini-loader"
   }
 }

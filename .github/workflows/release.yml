@@ -91,33 +91,33 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
-  # release-npm:
-  #   if: github.ref == 'refs/heads/main'
-  #   runs-on: ubuntu-latest
-  #   needs: [build, update-release-draft]
-  #   permissions:
-  #     contents: read
-  #     packages: write
-  #   steps:
-  #     - uses: actions/checkout@v3
-  #       with:
-  #         fetch-depth: 0
-  #     - run: corepack enable
-  #     - uses: actions/setup-node@v3
-  #       with:
-  #         cache: '${{ env.NODE_CACHE }}'
-  #         node-version: '${{ env.NODE_VERSION }}'
-  #         scope: '${{ env.NODE_SCOPE }}'
-  #     - uses: actions/download-artifact@v3
-  #       with:
-  #         name: lib
-  #         path: ./
-  #     - run: |
-  #         pnpm config set //registry.npmjs.org/:_authToken ${NPM_TOKEN}
-  #         pnpm install
-  #         git config user.name "Github Actions Bot"
-  #         git config user.email "<>"
-  #         node scripts/set-version.ts $(git describe --tag --abbrev=0)
-  #         pnpm publish -r --publish-branch main --access public --no-git-checks
-  #       env:
-  #         NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+  release-npm:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    needs: [build, update-release-draft]
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - run: corepack enable
+      - uses: actions/setup-node@v3
+        with:
+          cache: '${{ env.NODE_CACHE }}'
+          node-version: '${{ env.NODE_VERSION }}'
+          scope: '${{ env.NODE_SCOPE }}'
+      - uses: actions/download-artifact@v3
+        with:
+          name: lib
+          path: ./
+      - run: |
+          pnpm config set //registry.npmjs.org/:_authToken ${NPM_TOKEN}
+          pnpm install
+          git config user.name "Github Actions Bot"
+          git config user.email "<>"
+          node scripts/set-version.mjs $(git describe --tag --abbrev=0)
+          pnpm publish -r --publish-branch main --access public --no-git-checks
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
