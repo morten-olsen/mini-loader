@@ -1,8 +1,7 @@
-import { workerData } from 'worker_threads';
+const secretData = JSON.parse(process.env.SECRETS || '{}');
 
 const get = (id: string) => {
-  const items = workerData?.secrets ?? {};
-  return items[id];
+  return secretData[id];
 };
 
 const secrets = {

@@ -3,6 +3,7 @@ import { resolve } from 'path';
 import { createClient } from '../../client/client.js';
 import { bundle } from '../../bundler/bundler.js';
 import { step } from '../../utils/step.js';
+import { Context } from '../../context/context.js';
 
 const push = new Command('push');
 
@@ -14,9 +15,10 @@ push
   .option('-ai, --auto-install', 'Auto install dependencies', false)
   .action(async (script) => {
     const opts = push.opts();
+    const context = new Context();
     const location = resolve(script);
     const client = await step('Connecting to server', async () => {
-      return createClient();
+      return createClient(context);
     });
     const code = await step('Bundling', async () => {
       return await bundle({ entry: location, autoInstall: opts.autoInstall });

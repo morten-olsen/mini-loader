@@ -2,13 +2,20 @@ import { createTRPCProxyClient, httpBatchLink } from '@trpc/client';
 import superjson from 'superjson';
 import type { Runtime } from '@morten-olsen/mini-loader-server';
 import type { RootRouter } from '@morten-olsen/mini-loader-server';
+import { Context } from '../context/context.js';
 
-const createClient = () => {
+const createClient = (context: Context) => {
+  if (!context.host || !context.token) {
+    throw new Error('Not signed in');
+  }
   const client = createTRPCProxyClient<RootRouter>({
     transformer: superjson,
     links: [
       httpBatchLink({
-        url: 'http://localhost:4500/trpc',
+        url: `${context.host}/trpc`,
+        headers: {
+          authorization: `Bearer ${context.token}`,
+        },
       }),
     ],
   });

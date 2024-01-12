@@ -58,7 +58,7 @@ mini-loader artifacts ls
 To download a specific artifact:
 
 ```bash
-mini-loader artifacts pull <id> > myfile.txt
+mini-loader artifacts pull <id> myfile.txt
 ```
 
 Replace `<id>` with the identifier of the artifact you wish to download.

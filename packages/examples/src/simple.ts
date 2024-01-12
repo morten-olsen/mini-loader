@@ -1,5 +1,5 @@
 import { artifacts, logger } from '@morten-olsen/mini-loader';
 
-logger.info('Hello world');
+await logger.info('Hello world');
 
-artifacts.create('foo', 'bar');
+await artifacts.create('foo', 'bar');
