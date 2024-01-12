@@ -5,5 +5,9 @@ services:
     build:
       context: .
       dockerfile: ./docker/Dockerfile
+    volumes:
+      - data:/app/data
     ports:
       - 4500:4500
+volumes:
+  data:

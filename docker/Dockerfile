@@ -27,6 +27,7 @@ COPY --from=builder /app/out/full/ .
 RUN pnpm turbo run build --filter=@morten-olsen/mini-loader-server
 
 FROM base AS runner
+RUN apk add --no-cache jq curl
 WORKDIR /app
 
 # Don't run production as root
@@ -38,5 +39,12 @@ RUN chmod +x /entrypoint.sh
 
 COPY --from=installer /app .
 EXPOSE 4500
+VOLUME /app/data
+
+HEALTHCHECK \
+  --interval=10s \
+  --start-period=10s \
+  CMD curl -f http://localhost:4500/health || exit 1
+
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["mini-loader-server", "start"]
