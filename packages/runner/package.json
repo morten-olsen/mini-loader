@@ -1,6 +1,7 @@
 {
   "name": "@morten-olsen/mini-loader-runner",
   "version": "1.0.0",
+  "license": "GPL-3.0",
   "main": "./dist/esm/index.js",
   "types": "./dist/esm/index.d.ts",
   "scripts": {
@@ -24,5 +25,10 @@
   "dependencies": {
     "eventemitter3": "^5.0.1",
     "nanoid": "^5.0.4"
+  },
+  "homepage": "https://github.com/morten-olsen/mini-loader",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/morten-olsen/mini-loader-repo"
   }
 }
