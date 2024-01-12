@@ -1,6 +1,7 @@
 {
   "name": "@morten-olsen/mini-loader-runner",
   "version": "1.0.0",
+  "license": "GPL-3.0-or-later",
   "main": "./dist/esm/index.js",
   "types": "./dist/esm/index.d.ts",
   "scripts": {

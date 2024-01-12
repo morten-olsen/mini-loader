@@ -1,6 +1,8 @@
 {
   "name": "@morten-olsen/mini-loader-examples",
   "version": "1.0.0",
+  "license": "GPL-3.0-or-later",
+  "private": true,
   "main": "./dist/esm/index.js",
   "types": "./dist/esm/index.d.ts",
   "scripts": {
