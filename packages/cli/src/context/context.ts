@@ -1,7 +1,7 @@
 import envPaths from 'env-paths';
 import { existsSync, readFileSync, writeFileSync } from 'fs';
-import { mkdir } from 'fs/promises';
-import { dirname } from 'path';
+import { mkdir, readdir } from 'fs/promises';
+import { dirname, join } from 'path';
 
 type ContextValues = {
   host: string;
@@ -12,9 +12,9 @@ class Context {
   #location: string;
   #config?: ContextValues;
 
-  constructor() {
-    const paths = envPaths('dws');
-    this.#location = paths.config;
+  constructor(name: string) {
+    const paths = envPaths('mini-loader');
+    this.#location = join(paths.config, 'contexts', name);
     if (existsSync(this.#location)) {
       this.#config = JSON.parse(readFileSync(this.#location, 'utf-8'));
     }
@@ -44,6 +44,15 @@ class Context {
     const json = JSON.stringify(this.#config);
     mkdir(dirname(this.#location), { recursive: true });
     writeFileSync(this.#location, json);
+  };
+
+  public static list = async () => {
+    const paths = envPaths('mini-loader');
+    const location = join(paths.config, 'contexts');
+    if (!existsSync(location)) {
+      return [];
+    }
+    return await readdir(location);
   };
 }
 

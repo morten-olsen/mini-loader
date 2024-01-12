@@ -4,6 +4,7 @@ import { step } from '../../utils/step.js';
 import { Context } from '../../context/context.js';
 import { dirname, resolve } from 'path';
 import { mkdir, writeFile } from 'fs/promises';
+import { Config } from '../../config/config.js';
 
 const pull = new Command('pull');
 
@@ -12,7 +13,8 @@ pull
   .argument('<artifact-id>', 'Artifact ID')
   .argument('<file>', 'File to save')
   .action(async (id, file) => {
-    const context = new Context();
+    const config = new Config();
+    const context = new Context(config.context);
     const target = resolve(file);
     const client = await step('Connecting to server', async () => {
       return createClient(context);

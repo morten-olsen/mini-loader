@@ -3,6 +3,7 @@ import { createClient } from '../../client/client.js';
 import { step } from '../../utils/step.js';
 import { Context } from '../../context/context.js';
 import inquirer from 'inquirer';
+import { Config } from '../../config/config.js';
 
 const remove = new Command('remove');
 
@@ -24,7 +25,8 @@ remove
   .option('-s, --sort <order>', 'Sort', 'desc')
   .action(async () => {
     const { runId, loadId, severities, offset, limit, order } = remove.opts();
-    const context = new Context();
+    const config = new Config();
+    const context = new Context(config.context);
     const client = await step('Connecting to server', async () => {
       return createClient(context);
     });

@@ -2,12 +2,14 @@ import { Command } from 'commander';
 import inquerer from 'inquirer';
 import { Context } from '../../context/context.js';
 import { step } from '../../utils/step.js';
+import { Config } from '../../config/config.js';
 
 const login = new Command('login');
 
 login.description('Login to your account');
 login.action(async () => {
-  const context = new Context();
+  const config = new Config();
+  const context = new Context(config.context);
   const { host, token } = await inquerer.prompt([
     {
       type: 'input',

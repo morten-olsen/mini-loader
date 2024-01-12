@@ -4,6 +4,7 @@ import { createClient } from '../../client/client.js';
 import { bundle } from '../../bundler/bundler.js';
 import { step } from '../../utils/step.js';
 import { Context } from '../../context/context.js';
+import { Config } from '../../config/config.js';
 
 const push = new Command('push');
 
@@ -15,7 +16,8 @@ push
   .option('-ai, --auto-install', 'Auto install dependencies', false)
   .action(async (script) => {
     const opts = push.opts();
-    const context = new Context();
+    const config = new Config();
+    const context = new Context(config.context);
     const location = resolve(script);
     const client = await step('Connecting to server', async () => {
       return createClient(context);
