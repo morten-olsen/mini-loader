@@ -2,7 +2,7 @@
 
 <p>
 <center>
-    <img src="./assets/logo.png" width="300" height="300">
+    <img src="./assets/logo.png" width="300" height="300" />
 </center>
 </p>
 
@@ -18,6 +18,8 @@ Welcome to mini loader, a lightweight, Docker-based server solution for managing
 - **Automatic Dependency Handling**: Auto-download of required packages.
 - **Task Scheduling**: Built-in support for cron-like job scheduling.
 - **HTTP Gateway**: Expose a HTTP server from your workloads
+
+Also see [anti-features and limitations](./docs/anti-features.md)
 
 ## Quick Start
 
