@@ -22,9 +22,11 @@ Also see [anti-features and limitations](./docs/anti-features.md)
 Get up and running with mini loader in just a few steps:
 
 1. **Install the CLI**: `npm install -g @morten-olsen/mini-loader-cli`
-2. **Deploy the Server**:  `docker run -p 4500:4500 —-name ghcr.io/morten-olsen/mini-loader`.
-3. **Push Your First Load**: `mini-loader loads push script.mjs -r -i first`
-3. **See the logs**: `mini-loader logs ls -l first`
+2. **Deploy the Server**:  `docker run -p 4500:4500 —-name mini-loader ghcr.io/morten-olsen/mini-loader`.
+3. **Get your access token**: `docker exec mini-loader mini-loader-server create-token`
+4. **Login**: `mini-loader auth login http://localhost:4500`
+5. **Push Your First Load**: `mini-loader loads push script.mjs -r -i first`
+6. **See the logs**: `mini-loader logs ls -l first`
 
 For a detailed guide on getting started, please refer to the [Getting Started Tutorial](./docs/getting-started.md).
 
