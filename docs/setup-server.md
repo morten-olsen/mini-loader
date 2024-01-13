@@ -8,7 +8,7 @@ This guide will help you quickly set up and run a mini loader server using Docke
 To begin, let's deploy the mini loader container. Run the following command in your terminal:
 
 ```bash
-docker run -p 4500:4500 -n mini-loader ghcr.io/morten-olsen/mini-loader:main
+docker run -p 4500:4500 -n mini-loader ghcr.io/morten-olsen/mini-loader:latest
 ```
 
 This command downloads the latest mini loader image and runs it, exposing port 4500.
