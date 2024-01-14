@@ -1,4 +1,5 @@
-import { program } from 'commander';
+import { Command, program } from 'commander';
+import pkg from '../package.json';
 import { loads } from './commands/loads/loads.js';
 import { runs } from './commands/runs/runs.js';
 import { logs } from './commands/logs/logs.js';
@@ -16,5 +17,13 @@ program.addCommand(secrets);
 program.addCommand(local);
 program.addCommand(auth);
 program.addCommand(contexts);
+
+program.version(pkg.version);
+
+const version = new Command('version');
+version.action(() => {
+  console.log(pkg.version);
+});
+program.addCommand(version);
 
 await program.parseAsync();
