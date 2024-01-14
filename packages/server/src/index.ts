@@ -18,7 +18,11 @@ start.action(async () => {
 const createToken = new Command('create-token');
 createToken.action(async () => {
   const runtime = await Runtime.create();
-  const token = await runtime.auth.createToken({});
+  const token = await runtime.auth.createToken({
+    policy: {
+      '*:*': ['*'],
+    },
+  });
   console.log(token);
 });
 
