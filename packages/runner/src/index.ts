@@ -5,10 +5,11 @@ type RunOptions = {
   script: string;
   input?: Buffer | string;
   secrets?: Record<string, string>;
+  cacheLocation: string;
 };
 
-const run = async ({ script, input, secrets }: RunOptions) => {
-  const info = await setup({ script, input, secrets });
+const run = async ({ script, input, secrets, cacheLocation }: RunOptions) => {
+  const info = await setup({ script, input, secrets, cacheLocation });
 
   const worker = new Worker(info.scriptLocation, {
     stdin: false,

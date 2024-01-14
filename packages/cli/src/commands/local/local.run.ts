@@ -4,6 +4,7 @@ import { run as runLoad } from '@morten-olsen/mini-loader-runner';
 import { bundle } from '../../bundler/bundler.js';
 import { step } from '../../utils/step.js';
 import { readSecrets } from './local.utils.js';
+import { Config } from '../../config/config.js';
 
 const run = new Command('run');
 
@@ -12,6 +13,7 @@ run
   .argument('script')
   .action(async (script) => {
     const location = resolve(script);
+    const config = new Config();
     const { autoInstall } = run.opts();
     const secrets = await readSecrets();
 
@@ -21,6 +23,7 @@ run
     const { promise, emitter } = await runLoad({
       script: code,
       secrets,
+      cacheLocation: config.cacheLocation,
     });
     emitter.addListener('message', (message) => {
       switch (message.type) {
