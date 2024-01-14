@@ -4,17 +4,20 @@ import { Runner } from '../runner/runner.js';
 import { Config } from '../config/config.js';
 import { Auth } from '../auth/auth.js';
 import { resolve } from 'path';
+import { Scheduler } from '../scheduler/scheduler.js';
 
 class Runtime {
   #repos: Repos;
   #runner: Runner;
   #auth: Auth;
+  #scheduler: Scheduler;
 
   constructor(options: Config) {
     const database = new Database(options.database);
     this.#repos = new Repos({ database, config: options });
     this.#runner = new Runner({ repos: this.#repos, config: options });
     this.#auth = new Auth({ config: options });
+    this.#scheduler = new Scheduler({ runs: this.#repos.runs, schedules: this.#repos.schedules });
   }
 
   public get repos() {
@@ -27,6 +30,10 @@ class Runtime {
 
   public get auth() {
     return this.#auth;
+  }
+
+  public get scheduler() {
+    return this.#scheduler;
   }
 
   public static create = async () => {

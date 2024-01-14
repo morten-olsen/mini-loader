@@ -4,6 +4,7 @@ import { ArtifactRepo } from './artifacts/artifacts.js';
 import { LoadRepo } from './loads/loads.js';
 import { LogRepo } from './logs/logs.js';
 import { RunRepo } from './runs/runs.js';
+import { ScheduleRepo } from './schedules/schedules.js';
 import { SecretRepo } from './secrets/secrets.js';
 
 type ReposOptions = {
@@ -17,6 +18,7 @@ class Repos {
   #logs: LogRepo;
   #artifacts: ArtifactRepo;
   #secrets: SecretRepo;
+  #schedule: ScheduleRepo;
 
   constructor({ database, config }: ReposOptions) {
     this.#loads = new LoadRepo({
@@ -34,6 +36,9 @@ class Repos {
       database,
     });
     this.#secrets = new SecretRepo({
+      database,
+    });
+    this.#schedule = new ScheduleRepo({
       database,
     });
   }
@@ -57,8 +62,13 @@ class Repos {
   public get secrets() {
     return this.#secrets;
   }
+
+  public get schedules() {
+    return this.#schedule;
+  }
 }
 
+export { findSchedulesSchema, addScheduleSchema } from './schedules/schedules.js';
 export { findLogsSchema, addLogSchema } from './logs/logs.js';
 export { setLoadSchema, findLoadsSchema } from './loads/loads.js';
 export { createRunSchema, findRunsSchema } from './runs/runs.js';

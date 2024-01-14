@@ -1,6 +1,7 @@
 import { Knex } from 'knex';
 
 import * as init from './migration.init.js';
+import * as scheduleSupport from './migration.schedule.js';
 
 type Migration = {
   name: string;
@@ -8,7 +9,7 @@ type Migration = {
   down: (knex: Knex) => Promise<void>;
 };
 
-const migrations = [init] satisfies Migration[];
+const migrations = [init, scheduleSupport] satisfies Migration[];
 
 const source: Knex.MigrationSource<Migration> = {
   getMigrations: async () => migrations,
