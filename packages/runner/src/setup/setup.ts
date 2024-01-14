@@ -1,5 +1,4 @@
 import { join } from 'path';
-import os from 'os';
 import { nanoid } from 'nanoid';
 import { chmod, mkdir, rm, writeFile } from 'fs/promises';
 import { createServer } from 'net';
@@ -9,6 +8,7 @@ type SetupOptions = {
   input?: Buffer | string;
   script: string;
   secrets?: Record<string, string>;
+  cacheLocation: string;
 };
 
 type RunEvents = {
@@ -20,7 +20,7 @@ type RunEvents = {
 const setup = async (options: SetupOptions) => {
   const { input, script, secrets } = options;
   const emitter = new EventEmitter<RunEvents>();
-  const dataDir = join(os.tmpdir(), 'mini-loader', nanoid());
+  const dataDir = join(options.cacheLocation, nanoid());
 
   await mkdir(dataDir, { recursive: true });
   await chmod(dataDir, 0o700);

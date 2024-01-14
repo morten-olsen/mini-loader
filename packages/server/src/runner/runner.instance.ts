@@ -67,6 +67,7 @@ class RunnerInstance extends EventEmitter<RunnerInstanceEvents> {
         script,
         secrets: allSecrets,
         input,
+        cacheLocation: config.files.cache,
       });
       this.#run = current;
       const { promise, emitter } = current;

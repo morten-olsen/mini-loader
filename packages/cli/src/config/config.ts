@@ -7,12 +7,13 @@ type ConfigValues = {
   context?: string;
 };
 
+const paths = envPaths('mini-loader');
+
 class Config {
   #location: string;
   #config?: ConfigValues;
 
   constructor() {
-    const paths = envPaths('mini-loader');
     this.#location = join(paths.config, 'config.json');
     if (existsSync(this.#location)) {
       this.#config = JSON.parse(readFileSync(this.#location, 'utf-8'));
@@ -21,6 +22,10 @@ class Config {
 
   public get context() {
     return this.#config?.context || 'default';
+  }
+
+  public get cacheLocation() {
+    return join(paths.cache, this.context);
   }
 
   public setContext = (context: string) => {
