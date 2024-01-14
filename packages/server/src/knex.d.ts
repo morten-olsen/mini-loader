@@ -43,5 +43,15 @@ declare module 'knex/types/tables.js' {
       createdAt: Date;
       updatedAt: Date;
     };
+    schedules: {
+      id: string;
+      name?: string;
+      description?: string;
+      load: string;
+      cron: string;
+      input?: string;
+      createdAt: Date;
+      updatedAt: Date;
+    };
   }
 }

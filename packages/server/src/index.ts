@@ -6,6 +6,7 @@ const start = new Command('start');
 start.action(async () => {
   const port = 4500;
   const runtime = await Runtime.create();
+  await runtime.scheduler.start();
   const server = await createServer(runtime);
   await server.listen({
     port,
