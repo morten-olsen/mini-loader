@@ -27,6 +27,10 @@ COPY --from=builder /app/out/full/ .
 RUN pnpm turbo run build --filter=@morten-olsen/mini-loader-server
 
 FROM base AS runner
+ENV \
+  NODE_ENV=production \
+  DATA_DIR=/data \
+  CACHE_DIR=/cache
 RUN apk add --no-cache jq curl
 WORKDIR /app
 
@@ -39,7 +43,7 @@ RUN chmod +x /entrypoint.sh
 
 COPY --from=installer /app .
 EXPOSE 4500
-VOLUME /app/data
+VOLUME /data
 
 HEALTHCHECK \
   --interval=10s \

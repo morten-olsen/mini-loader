@@ -1,8 +1,8 @@
 {
   "name": "@morten-olsen/mini-loader-cli",
   "version": "1.0.0",
-  "main": "./dist/esm/index.js",
-  "types": "./dist/esm/index.d.ts",
+  "main": "./dist/esm/src/index.js",
+  "types": "./dist/esm/src/index.d.ts",
   "license": "GPL-3.0",
   "bin": {
     "mini-loader": "./bin/index.mjs"
@@ -16,11 +16,12 @@
   ],
   "exports": {
     ".": {
-      "import": "./dist/esm/index.js"
+      "import": "./dist/esm/src/index.js"
     }
   },
   "dependencies": {
     "@morten-olsen/mini-loader-runner": "workspace:^",
+    "@morten-olsen/mini-loader-server": "workspace:^",
     "@rollup/plugin-auto-install": "^3.0.5",
     "@rollup/plugin-commonjs": "^25.0.7",
     "@rollup/plugin-json": "^6.1.0",
@@ -40,7 +41,6 @@
   },
   "devDependencies": {
     "@morten-olsen/mini-loader-configs": "workspace:^",
-    "@morten-olsen/mini-loader-server": "workspace:^",
     "@types/inquirer": "^9.0.7",
     "typescript": "^5.3.3"
   },

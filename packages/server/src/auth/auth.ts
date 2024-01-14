@@ -20,10 +20,10 @@ class Auth {
 
   #setup = async () => {
     const { config } = this.#options;
-    const secretLocation = resolve(config.files.location, 'secret');
+    const secretLocation = resolve(config.files.data, 'secret');
     let secret = '';
+    await mkdir(config.files.data, { recursive: true });
     if (!existsSync(secretLocation)) {
-      await mkdir(config.files.location, { recursive: true });
       secret = nanoid();
       await writeFile(secretLocation, secret);
     } else {

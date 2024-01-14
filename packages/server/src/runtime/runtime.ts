@@ -1,10 +1,13 @@
+import { resolve } from 'path';
+import envPaths from 'env-paths';
 import { Database } from '../database/database.js';
 import { Repos } from '../repos/repos.js';
 import { Runner } from '../runner/runner.js';
 import { Config } from '../config/config.js';
 import { Auth } from '../auth/auth.js';
-import { resolve } from 'path';
 import { Scheduler } from '../scheduler/scheduler.js';
+
+const paths = envPaths('mini-loader-server');
 
 class Runtime {
   #repos: Repos;
@@ -41,12 +44,13 @@ class Runtime {
       database: {
         client: 'sqlite3',
         connection: {
-          filename: resolve(process.cwd(), 'data', 'database.sqlite'),
+          filename: resolve(paths.data, 'database.sqlite'),
         },
         useNullAsDefault: true,
       },
       files: {
-        location: resolve(process.cwd(), 'data', 'files'),
+        data: process.env.DATA_DIR || resolve(paths.data, 'data', 'files'),
+        cache: process.env.CACHE_DIR || resolve(paths.cache, 'data', 'cache'),
       },
     });
 

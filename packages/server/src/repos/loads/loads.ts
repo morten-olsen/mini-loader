@@ -62,7 +62,7 @@ class LoadRepo extends EventEmitter<LoadRepoEvents> {
     const db = await database.instance;
     const id = options.id || nanoid();
     const script = createHash('sha256').update(options.script).digest('hex');
-    const scriptDir = resolve(this.#options.config.files.location, 'scripts');
+    const scriptDir = resolve(this.#options.config.files.data, 'scripts');
     await mkdir(scriptDir, { recursive: true });
     await writeFile(resolve(scriptDir, `${script}.js`), options.script);
 

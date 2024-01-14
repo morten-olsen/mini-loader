@@ -1,3 +1,4 @@
+import pkg from '../../package.json';
 import { fastifyTRPCPlugin, FastifyTRPCPluginOptions } from '@trpc/server/adapters/fastify';
 import fastify from 'fastify';
 import { RootRouter, rootRouter } from '../router/router.js';
@@ -13,9 +14,6 @@ const createServer = async (runtime: Runtime) => {
       level: 'warn',
     },
   });
-  server.get('/', async () => {
-    return { hello: 'world' };
-  });
 
   server.get('/health', async (req) => {
     let authorized = false;
@@ -27,7 +25,7 @@ const createServer = async (runtime: Runtime) => {
         authorized = true;
       }
     } catch (error) {}
-    return { authorized, status: 'ok' };
+    return { authorized, status: 'ok', version: pkg.version };
   });
 
   server.register(fastifyTRPCPlugin, {

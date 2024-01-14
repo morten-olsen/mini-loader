@@ -59,7 +59,7 @@ class RunnerInstance extends EventEmitter<RunnerInstanceEvents> {
     const { runs, secrets } = repos;
     try {
       const { script: scriptHash, input } = await runs.getById(id);
-      const scriptLocation = resolve(config.files.location, 'scripts', `${scriptHash}.js`);
+      const scriptLocation = resolve(config.files.data, 'scripts', `${scriptHash}.js`);
       const script = await readFile(scriptLocation, 'utf-8');
       const allSecrets = await secrets.getAll();
       await runs.started(id);
