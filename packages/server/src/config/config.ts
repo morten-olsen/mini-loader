@@ -3,7 +3,8 @@ import { Knex } from 'knex';
 type Config = {
   database: Omit<Knex.Config, 'migrations'>;
   files: {
-    location: string;
+    data: string;
+    cache: string;
   };
   auth?: {
     oidc?: {
