@@ -1,6 +1,6 @@
 import envPaths from 'env-paths';
-import { existsSync, readFileSync, writeFileSync } from 'fs';
-import { mkdir, readdir } from 'fs/promises';
+import { existsSync, readFileSync } from 'fs';
+import { mkdir, readdir, writeFile } from 'fs/promises';
 import { dirname, join } from 'path';
 
 type ContextValues = {
@@ -42,8 +42,8 @@ class Context {
       return;
     }
     const json = JSON.stringify(this.#config);
-    mkdir(dirname(this.#location), { recursive: true });
-    writeFileSync(this.#location, json);
+    await mkdir(dirname(this.#location), { recursive: true });
+    await writeFile(this.#location, json);
   };
 
   public static list = async () => {
