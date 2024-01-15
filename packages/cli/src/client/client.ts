@@ -1,10 +1,14 @@
 import { createTRPCProxyClient, httpBatchLink } from '@trpc/client';
 import superjson from 'superjson';
+import { createRequire } from 'module';
 import type { Runtime } from '@morten-olsen/mini-loader-server';
 import type { RootRouter } from '@morten-olsen/mini-loader-server';
-import pkg from '../../package.json';
 import { Context } from '../context/context.js';
+import { readFile } from 'fs/promises';
 
+const require = createRequire(import.meta.url);
+
+const pkg = JSON.parse(await readFile(require.resolve('#pkg'), 'utf-8'));
 const createClient = (context: Context) => {
   if (!context.host || !context.token) {
     throw new Error('Not signed in');

@@ -6,7 +6,7 @@ import { join } from 'path';
 const ENV_PREFIX = 'ML_S_';
 
 const readSecrets = async () => {
-  let secretLocation = join(process.cwd(), '.secret');
+  let secretLocation = join(process.cwd(), '.secrets');
 
   let secrets: Record<string, string> = {};
 

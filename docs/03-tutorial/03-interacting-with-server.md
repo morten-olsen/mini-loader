@@ -67,4 +67,4 @@ Replace `<id>` with the identifier of the artifact you wish to download.
 
 You're now equipped to manage loads, runs, logs, and artifacts using the mini loader CLI. For advanced usage, such as managing secrets, proceed to the next section.
 
-[Next: Managing Secrets](./managing-secrets.md)
+[Next: Managing Secrets](./04-managing-secrets.md)
