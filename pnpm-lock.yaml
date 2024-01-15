@@ -164,6 +164,9 @@ importers:
       '@fastify/reply-from':
         specifier: ^9.7.0
         version: 9.7.0
+      '@morten-olsen/mini-loader-runner':
+        specifier: workspace:^
+        version: link:../runner
       '@trpc/client':
         specifier: ^10.45.0
         version: 10.45.0(@trpc/server@10.45.0)
@@ -210,9 +213,6 @@ importers:
       '@morten-olsen/mini-loader-configs':
         specifier: workspace:^
         version: link:../configs
-      '@morten-olsen/mini-loader-runner':
-        specifier: workspace:^
-        version: link:../runner
       '@types/jsonwebtoken':
         specifier: ^9.0.5
         version: 9.0.5
