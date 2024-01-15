@@ -24,13 +24,13 @@
   },
   "devDependencies": {
     "@morten-olsen/mini-loader-configs": "workspace:^",
-    "@morten-olsen/mini-loader-runner": "workspace:^",
     "@types/jsonwebtoken": "^9.0.5",
     "@types/node": "^20.10.8",
     "typescript": "^5.3.3"
   },
   "dependencies": {
     "@fastify/reply-from": "^9.7.0",
+    "@morten-olsen/mini-loader-runner": "workspace:^",
     "@trpc/client": "^10.45.0",
     "@trpc/server": "^10.45.0",
     "commander": "^11.1.0",
