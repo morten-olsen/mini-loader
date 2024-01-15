@@ -86,7 +86,7 @@ jobs:
 
       - name: Retrieve version
         run: |
-          echo "TAG_NAME=$(git describe --tag --abbrev=0) >> $GITHUB_OUTPUT
+          echo "TAG_NAME=$(git describe --tag --abbrev=0)" >> $GITHUB_OUTPUT
         id: version
 
       - name: Extract metadata (tags, labels) for Docker
