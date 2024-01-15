@@ -25,7 +25,7 @@ Get up and running with mini loader in just a few steps:
 
 ```bash
 # Install the CLI and the server
-npm i -g @morten-olsen/mini-loader-cli @morten-olsen/mini-loader-server
+npm i -g @morten-olsen/mini-loader-cli @morten-olsen/mini-loader-server @morten-olsen/mini-loader-runnerr 
 
 # Start the server
 mini-loader-server start &
