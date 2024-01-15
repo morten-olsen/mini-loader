@@ -2,6 +2,7 @@
   "extends": "@morten-olsen/mini-loader-configs/tsconfig.esm.json",
   "compilerOptions": {
     "outDir": "dist/esm",
+    "rootDir": "src"
   },
   "include": [
     "./src/**/*.ts"

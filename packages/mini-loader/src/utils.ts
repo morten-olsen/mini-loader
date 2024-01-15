@@ -1,4 +1,5 @@
 import { Socket, createConnection } from 'net';
+import { Event } from './index.js';
 
 const connect = () =>
   new Promise<Socket>((resolve, reject) => {
@@ -12,7 +13,7 @@ const connect = () =>
     });
   });
 
-const send = async (data: any) =>
+const send = async (data: Event) =>
   new Promise<void>(async (resolve, reject) => {
     const connection = await connect();
     const cleaned = JSON.parse(JSON.stringify(data));

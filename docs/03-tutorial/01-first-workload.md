@@ -46,4 +46,4 @@ After running the command, you should see an output confirming that a new artifa
 
 Congratulations on setting up and running your first script with mini loader! You're now ready to take the next step.
 
-[Next: Setting Up the Server](./setup-server.md)
+[Next: Setting Up the Server](./02-setup-server.md)

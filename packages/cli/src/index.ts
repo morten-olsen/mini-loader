@@ -1,5 +1,5 @@
 import { Command, program } from 'commander';
-import pkg from '../package.json';
+import { createRequire } from 'module';
 import { loads } from './commands/loads/loads.js';
 import { runs } from './commands/runs/runs.js';
 import { logs } from './commands/logs/logs.js';
@@ -9,6 +9,11 @@ import { local } from './commands/local/local.js';
 import { auth } from './commands/auth/auth.js';
 import { contexts } from './commands/contexts/contexts.js';
 import { schedules } from './commands/schedules/schedules.js';
+import { readFile } from 'fs/promises';
+
+const require = createRequire(import.meta.url);
+
+const pkg = JSON.parse(await readFile(require.resolve('#pkg'), 'utf-8'));
 
 program.addCommand(loads);
 program.addCommand(runs);

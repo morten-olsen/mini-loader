@@ -1,7 +1,8 @@
-Certainly! Here's a revised version of your documentation page to make it 
+Certainly! Here's a revised version of your documentation page to make it
+
 ## Quick Start with mini loader using Docker
 
-This guide will help you quickly set up and run a mini loader server using Docker. Follow these simple steps to deploy your server and start interacting with it using the [mini-loader CLI](./first-workload.md).
+This guide will help you quickly set up and run a mini loader server using Docker. Follow these simple steps to deploy your server and start interacting with it using the [mini-loader CLI](./01-first-workload.md).
 
 ### Step 1: Deploy the mini loader Container
 
@@ -57,4 +58,4 @@ This command lists all the loads currently on your server, confirming that the C
 
 You've successfully deployed and configured your mini loader server using Docker! You're now ready to start interacting with the server.
 
-[Next: Interacting with the Server](./interacting-with-server.md)
+[Next: Interacting with the Server](./03-interacting-with-server.md)

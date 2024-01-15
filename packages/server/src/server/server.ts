@@ -1,12 +1,18 @@
-import pkg from '../../package.json';
 import { fastifyTRPCPlugin, FastifyTRPCPluginOptions } from '@trpc/server/adapters/fastify';
 import fastify from 'fastify';
 import { RootRouter, rootRouter } from '../router/router.js';
 import { createContext } from '../router/router.utils.js';
 import { Runtime } from '../runtime/runtime.js';
 import { gateway } from '../gateway/gateway.js';
+import { createRequire } from 'module';
+import { readFile } from 'fs/promises';
+
+const require = createRequire(import.meta.url);
 
 const createServer = async (runtime: Runtime) => {
+  const pkgLocation = require.resolve('#pkg');
+  const pkg = JSON.parse(await readFile(pkgLocation, 'utf-8'));
+
   const server = fastify({
     maxParamLength: 10000,
     bodyLimit: 30 * 1024 * 1024,

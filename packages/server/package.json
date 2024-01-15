@@ -2,8 +2,8 @@
   "name": "@morten-olsen/mini-loader-server",
   "version": "1.0.0",
   "license": "GPL-3.0",
-  "main": "./dist/esm/src/index.js",
-  "types": "./dist/esm/src/index.d.ts",
+  "main": "./dist/esm/index.js",
+  "types": "./dist/esm/index.d.ts",
   "bin": {
     "mini-loader-server": "./bin/index.mjs"
   },
@@ -14,9 +14,12 @@
   "files": [
     "./dist"
   ],
+  "imports": {
+    "#pkg": "./package.json"
+  },
   "exports": {
     ".": {
-      "import": "./dist/esm/src/index.js"
+      "import": "./dist/esm/index.js"
     }
   },
   "devDependencies": {
