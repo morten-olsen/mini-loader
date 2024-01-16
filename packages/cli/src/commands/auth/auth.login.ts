@@ -1,28 +1,37 @@
 import { Command } from 'commander';
 import inquerer from 'inquirer';
-import { Context } from '../../context/context.js';
-import { step } from '../../utils/step.js';
-import { Config } from '../../config/config.js';
+import { getApi } from '../../utils/command.js';
 
 const login = new Command('login');
 
 login.description('Login to your account');
+login.option('--host <host>', 'The host of your server');
+login.option('--token <token>', 'The token of your account');
 login.action(async () => {
-  const config = new Config();
-  const context = new Context(config.context);
-  const { host, token } = await inquerer.prompt([
-    {
-      type: 'input',
-      name: 'host',
-      message: 'Enter the host of your server',
-      default: context.host ?? 'http://localhost:4500',
-    },
-    {
-      type: 'password',
-      name: 'token',
-      message: 'Enter your token',
-    },
-  ]);
+  let { host, token } = login.opts();
+  const { step, context } = getApi(login);
+  if (!host) {
+    const answers = await inquerer.prompt([
+      {
+        type: 'input',
+        name: 'host',
+        message: 'Enter the host of your server',
+        default: context.host || 'http://localhost:4500',
+      },
+    ]);
+    host = answers.host;
+  }
+
+  if (!token) {
+    const answers = await inquerer.prompt([
+      {
+        type: 'password',
+        name: 'token',
+        message: 'Enter your token',
+      },
+    ]);
+    token = answers.token;
+  }
 
   const healthResponse = await step('Getting auth status', async () => {
     return await fetch(`${host}/health`, {

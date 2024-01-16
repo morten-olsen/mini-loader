@@ -1,6 +1,7 @@
 import { CronJob } from 'cron';
 import { ScheduleRepo } from '../repos/schedules/schedules.js';
 import { RunRepo } from '../repos/runs/runs.js';
+import { ContainerInstance, Service } from 'typedi';
 
 type SchedulerOptions = {
   runs: RunRepo;
@@ -13,12 +14,16 @@ type RunningSchedule = {
   stop: () => Promise<void>;
 };
 
+@Service()
 class Scheduler {
   #running: RunningSchedule[] = [];
   #options: SchedulerOptions;
 
-  constructor(options: SchedulerOptions) {
-    this.#options = options;
+  constructor(container: ContainerInstance) {
+    this.#options = {
+      runs: container.get(RunRepo),
+      schedules: container.get(ScheduleRepo),
+    };
     const { schedules } = this.#options;
     schedules.on('added', this.#add);
     schedules.on('removed', this.#remove);

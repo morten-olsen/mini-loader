@@ -1,21 +1,27 @@
 import { EventEmitter } from 'eventemitter3';
 import { Database } from '../../database/database.js';
-import { nanoid } from 'nanoid';
 import { AddArtifactOptions, FindArtifactsOptions } from './artifacts.schemas.js';
 import { createHash } from 'crypto';
+import { ContainerInstance, Service } from 'typedi';
+import { IdGenerator } from '../../id/id.js';
 
 type ArtifactRepoEvents = {};
 
 type ArtifactRepoOptions = {
   database: Database;
+  idGenerator: IdGenerator;
 };
 
+@Service()
 class ArtifactRepo extends EventEmitter<ArtifactRepoEvents> {
   #options: ArtifactRepoOptions;
 
-  constructor(options: ArtifactRepoOptions) {
+  constructor(container: ContainerInstance) {
     super();
-    this.#options = options;
+    this.#options = {
+      database: container.get(Database),
+      idGenerator: container.get(IdGenerator),
+    };
   }
 
   public get = async (id: string) => {
@@ -26,9 +32,9 @@ class ArtifactRepo extends EventEmitter<ArtifactRepoEvents> {
   };
 
   public add = async (options: AddArtifactOptions) => {
-    const { database } = this.#options;
+    const { database, idGenerator } = this.#options;
     const db = await database.instance;
-    const id = nanoid();
+    const id = idGenerator.generate();
 
     await db('artifacts').insert({
       id,

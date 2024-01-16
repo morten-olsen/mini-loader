@@ -1,10 +1,7 @@
 import { Command } from 'commander';
 import { resolve } from 'path';
-import { createClient } from '../../client/client.js';
 import { bundle } from '../../bundler/bundler.js';
-import { step } from '../../utils/step.js';
-import { Context } from '../../context/context.js';
-import { Config } from '../../config/config.js';
+import { getApi } from '../../utils/command.js';
 
 const push = new Command('push');
 
@@ -16,12 +13,8 @@ push
   .option('-ai, --auto-install', 'Auto install dependencies', false)
   .action(async (script) => {
     const opts = push.opts();
-    const config = new Config();
-    const context = new Context(config.context);
+    const { step, log, client } = getApi(push);
     const location = resolve(script);
-    const client = await step('Connecting to server', async () => {
-      return createClient(context);
-    });
     const code = await step('Bundling', async () => {
       return await bundle({ entry: location, autoInstall: opts.autoInstall });
     });
@@ -32,12 +25,12 @@ push
         script: code,
       });
     });
-    console.log('created load with id', id);
+    await log(`created load with id ${id}`);
     if (opts.run) {
       const runId = await step('Creating run', async () => {
         return await client.runs.create.mutate({ loadId: id });
       });
-      console.log('created run with id', runId);
+      await log(`created run with id ${runId}`);
     }
   });
 

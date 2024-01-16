@@ -1,9 +1,9 @@
 import { Command } from 'commander';
-import { Config } from '../../config/config.js';
+import { getApi } from '../../utils/command.js';
 
 const current = new Command('current');
 current.action(async () => {
-  const config = new Config();
+  const { config } = getApi(current);
   console.log(config.context);
 });
 

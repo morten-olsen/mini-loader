@@ -1,8 +1,5 @@
 import { Command } from 'commander';
-import { createClient } from '../../client/client.js';
-import { step } from '../../utils/step.js';
-import { Context } from '../../context/context.js';
-import { Config } from '../../config/config.js';
+import { getApi } from '../../utils/command.js';
 
 const add = new Command('add');
 
@@ -12,12 +9,8 @@ add
   .argument('<cron>', 'Cron')
   .option('-n, --name <name>', 'Name')
   .action(async (loadId, cron) => {
-    const config = new Config();
-    const context = new Context(config.context);
+    const { step, client } = getApi(add);
     const { name } = add.opts();
-    const client = await step('Connecting to server', async () => {
-      return createClient(context);
-    });
     const id = await step('Adding schedule', async () => {
       return await client.schedules.add.mutate({
         name,

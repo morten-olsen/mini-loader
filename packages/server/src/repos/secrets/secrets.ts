@@ -1,6 +1,7 @@
 import { EventEmitter } from 'eventemitter3';
 import { Database } from '../../database/database.js';
 import { FindSecretOptions, SetSecretOptions } from './secrets.schemas.js';
+import { ContainerInstance, Service } from 'typedi';
 
 type LogRepoEvents = {};
 
@@ -8,12 +9,15 @@ type LogRepoOptions = {
   database: Database;
 };
 
+@Service()
 class SecretRepo extends EventEmitter<LogRepoEvents> {
   #options: LogRepoOptions;
 
-  constructor(options: LogRepoOptions) {
+  constructor(container: ContainerInstance) {
     super();
-    this.#options = options;
+    this.#options = {
+      database: container.get(Database),
+    };
   }
 
   public set = async (options: SetSecretOptions) => {

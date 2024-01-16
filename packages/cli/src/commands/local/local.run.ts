@@ -2,9 +2,8 @@ import { Command } from 'commander';
 import { resolve } from 'path';
 import { run as runLoad } from '@morten-olsen/mini-loader-runner';
 import { bundle } from '../../bundler/bundler.js';
-import { step } from '../../utils/step.js';
 import { readSecrets } from './local.utils.js';
-import { Config } from '../../config/config.js';
+import { getApi } from '../../utils/command.js';
 
 const run = new Command('run');
 
@@ -12,8 +11,8 @@ run
   .option('-ai, --auto-install', 'Auto install dependencies', false)
   .argument('script')
   .action(async (script) => {
+    const { step, config } = getApi(run);
     const location = resolve(script);
-    const config = new Config();
     const { autoInstall } = run.opts();
     const secrets = await readSecrets();
 

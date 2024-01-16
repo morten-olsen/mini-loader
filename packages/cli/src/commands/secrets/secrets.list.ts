@@ -1,8 +1,5 @@
 import { Command } from 'commander';
-import { createClient } from '../../client/client.js';
-import { step } from '../../utils/step.js';
-import { Context } from '../../context/context.js';
-import { Config } from '../../config/config.js';
+import { getApi } from '../../utils/command.js';
 
 const list = new Command('list');
 
@@ -15,16 +12,12 @@ const toInt = (value?: string) => {
 
 list
   .alias('ls')
-  .description('List logs')
+  .description('List secrets')
   .option('-o, --offset <offset>', 'Offset')
   .option('-a, --limit <limit>', 'Limit', '1000')
   .action(async () => {
+    const { step, client } = getApi(list);
     const { offset, limit } = list.opts();
-    const config = new Config();
-    const context = new Context(config.context);
-    const client = await step('Connecting to server', async () => {
-      return createClient(context);
-    });
     const secrets = await step('Getting secrets', async () => {
       return await client.secrets.find.query({
         offset: toInt(offset),

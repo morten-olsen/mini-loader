@@ -1,11 +1,12 @@
 import { EventEmitter } from 'eventemitter3';
 import { Database } from '../../database/database.js';
 import { FindLoadsOptions, SetLoadOptions } from './loads.schemas.js';
-import { nanoid } from 'nanoid';
 import { createHash } from 'crypto';
 import { Config } from '../../config/config.js';
 import { mkdir, writeFile } from 'fs/promises';
 import { resolve } from 'path';
+import { ContainerInstance, Service } from 'typedi';
+import { IdGenerator } from '../../id/id.js';
 
 type LoadRepoEvents = {
   created: (id: string) => void;
@@ -16,14 +17,20 @@ type LoadRepoEvents = {
 type LoadRepoOptions = {
   database: Database;
   config: Config;
+  idGenerator: IdGenerator;
 };
 
+@Service()
 class LoadRepo extends EventEmitter<LoadRepoEvents> {
   #options: LoadRepoOptions;
 
-  constructor(options: LoadRepoOptions) {
+  constructor(container: ContainerInstance) {
     super();
-    this.#options = options;
+    this.#options = {
+      database: container.get(Database),
+      config: container.get(Config),
+      idGenerator: container.get(IdGenerator),
+    };
   }
 
   public getById = async (id: string) => {
@@ -58,9 +65,9 @@ class LoadRepo extends EventEmitter<LoadRepoEvents> {
   };
 
   public set = async (options: SetLoadOptions) => {
-    const { database } = this.#options;
+    const { database, idGenerator } = this.#options;
     const db = await database.instance;
-    const id = options.id || nanoid();
+    const id = options.id || idGenerator.generate();
     const script = createHash('sha256').update(options.script).digest('hex');
     const scriptDir = resolve(this.#options.config.files.data, 'scripts');
     await mkdir(scriptDir, { recursive: true });

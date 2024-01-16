@@ -2,13 +2,15 @@ import { initTRPC } from '@trpc/server';
 import { CreateFastifyContextOptions } from '@trpc/server/adapters/fastify';
 import superjson from 'superjson';
 import { Runtime } from '../runtime/runtime.js';
+import { ContainerInstance } from 'typedi';
 
 type ContextOptions = {
-  runtime: Runtime;
+  container: ContainerInstance;
 };
 
-const createContext = async ({ runtime }: ContextOptions) => {
+const createContext = async ({ container }: ContextOptions) => {
   return async ({ req }: CreateFastifyContextOptions) => {
+    const runtime = container.get(Runtime);
     const { authorization } = req.headers;
     const { auth } = runtime;
     if (!authorization) {
@@ -18,6 +20,7 @@ const createContext = async ({ runtime }: ContextOptions) => {
     await auth.validateToken(token);
     return {
       runtime,
+      container,
     };
   };
 };
