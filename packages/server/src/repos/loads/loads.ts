@@ -60,7 +60,7 @@ class LoadRepo extends EventEmitter<LoadRepoEvents> {
   public set = async (options: SetLoadOptions) => {
     const { database } = this.#options;
     const db = await database.instance;
-    const id = options.id || nanoid();
+    const id = options.id || `auto-id/${nanoid()}`;
     const script = createHash('sha256').update(options.script).digest('hex');
     const scriptDir = resolve(this.#options.config.files.data, 'scripts');
     await mkdir(scriptDir, { recursive: true });

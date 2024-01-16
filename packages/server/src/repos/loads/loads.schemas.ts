@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 const setLoadSchema = z.object({
-  id: z.string(),
+  id: z.string().optional(),
   name: z.string().optional(),
   script: z.string(),
 });
