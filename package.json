@@ -8,21 +8,25 @@
     "build": "turbo build",
     "build:dev": "tsc --build --watch",
     "test:lint": "eslint ./packages/*/src",
-    "test": "pnpm run test:lint"
+    "test:code": "vitest --coverage",
+    "test": "pnpm run test:lint && pnpm run test:code"
   },
   "keywords": [],
   "author": "",
   "devDependencies": {
     "@react-native-community/eslint-config": "^3.2.0",
+    "@vitest/coverage-v8": "^1.2.0",
     "eslint": "^8.53.0",
     "prettier": "^2.8.8",
     "turbo": "^1.10.16",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "vite": "^5.0.11"
   },
   "dependencies": {
     "@pnpm/find-workspace-packages": "^6.0.9",
     "@types/node": "^20.10.8",
-    "ts-node": "^10.9.2"
+    "ts-node": "^10.9.2",
+    "vitest": "^1.2.0"
   },
   "homepage": "https://github.com/morten-olsen/mini-loader",
   "repository": {

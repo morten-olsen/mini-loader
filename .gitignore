@@ -2,3 +2,5 @@
 .turbo/
 /.pnpm-store/
 /out/
+/coverage/
+/e2e-tmp/

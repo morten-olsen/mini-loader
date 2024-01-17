@@ -1,8 +1,9 @@
 import { EventEmitter } from 'eventemitter3';
 import { Database } from '../../database/database.js';
-import { nanoid } from 'nanoid';
 import { AddScheduleOptions, FindSchedulesOptions } from './schedules.schemas.js';
 import { createHash } from 'crypto';
+import { ContainerInstance, Service } from 'typedi';
+import { IdGenerator } from '../../id/id.js';
 
 type ScheduleRepoEvents = {
   added: (id: string) => void;
@@ -11,14 +12,19 @@ type ScheduleRepoEvents = {
 
 type ScheduleRepoOptions = {
   database: Database;
+  idGenerator: IdGenerator;
 };
 
+@Service()
 class ScheduleRepo extends EventEmitter<ScheduleRepoEvents> {
   #options: ScheduleRepoOptions;
 
-  constructor(options: ScheduleRepoOptions) {
+  constructor(container: ContainerInstance) {
     super();
-    this.#options = options;
+    this.#options = {
+      database: container.get(Database),
+      idGenerator: container.get(IdGenerator),
+    };
   }
 
   public get = async (id: string) => {
@@ -29,9 +35,9 @@ class ScheduleRepo extends EventEmitter<ScheduleRepoEvents> {
   };
 
   public add = async (options: AddScheduleOptions) => {
-    const { database } = this.#options;
+    const { database, idGenerator } = this.#options;
     const db = await database.instance;
-    const id = nanoid();
+    const id = idGenerator.generate();
 
     await db('schedules').insert({
       id,

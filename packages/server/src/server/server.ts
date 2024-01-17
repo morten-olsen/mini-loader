@@ -2,17 +2,12 @@ import { fastifyTRPCPlugin, FastifyTRPCPluginOptions } from '@trpc/server/adapte
 import fastify from 'fastify';
 import { RootRouter, rootRouter } from '../router/router.js';
 import { createContext } from '../router/router.utils.js';
-import { Runtime } from '../runtime/runtime.js';
 import { gateway } from '../gateway/gateway.js';
-import { createRequire } from 'module';
-import { readFile } from 'fs/promises';
+import { ContainerInstance } from 'typedi';
+import { Runtime } from '../runtime/runtime.js';
 
-const require = createRequire(import.meta.url);
-
-const createServer = async (runtime: Runtime) => {
-  const pkgLocation = require.resolve('#pkg');
-  const pkg = JSON.parse(await readFile(pkgLocation, 'utf-8'));
-
+const createServer = async (container: ContainerInstance) => {
+  const runtime = container.get(Runtime);
   const server = fastify({
     maxParamLength: 10000,
     bodyLimit: 30 * 1024 * 1024,
@@ -31,14 +26,14 @@ const createServer = async (runtime: Runtime) => {
         authorized = true;
       }
     } catch (error) {}
-    return { authorized, status: 'ok', version: pkg.version };
+    return { authorized, status: 'ok' };
   });
 
   server.register(fastifyTRPCPlugin, {
     prefix: '/trpc',
     trpcOptions: {
       router: rootRouter,
-      createContext: await createContext({ runtime }),
+      createContext: await createContext({ container }),
       onError({ error }) {
         console.error(error);
       },

@@ -1,27 +1,33 @@
 import { EventEmitter } from 'eventemitter3';
 import { Database } from '../../database/database.js';
 import { AddLogOptions, FindLogsOptions } from './logs.schemas.js';
-import { nanoid } from 'nanoid';
 import { createHash } from 'crypto';
+import { ContainerInstance, Service } from 'typedi';
+import { IdGenerator } from '../../id/id.js';
 
 type LogRepoEvents = {};
 
 type LogRepoOptions = {
   database: Database;
+  idGenerator: IdGenerator;
 };
 
+@Service()
 class LogRepo extends EventEmitter<LogRepoEvents> {
   #options: LogRepoOptions;
 
-  constructor(options: LogRepoOptions) {
+  constructor(container: ContainerInstance) {
     super();
-    this.#options = options;
+    this.#options = {
+      database: container.get(Database),
+      idGenerator: container.get(IdGenerator),
+    };
   }
 
   public add = async (options: AddLogOptions) => {
-    const { database } = this.#options;
+    const { database, idGenerator } = this.#options;
     const db = await database.instance;
-    const id = nanoid();
+    const id = idGenerator.generate();
 
     await db('logs').insert({
       id,

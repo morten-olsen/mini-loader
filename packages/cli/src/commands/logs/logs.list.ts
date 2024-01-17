@@ -1,8 +1,5 @@
 import { Command } from 'commander';
-import { createClient } from '../../client/client.js';
-import { step } from '../../utils/step.js';
-import { Context } from '../../context/context.js';
-import { Config } from '../../config/config.js';
+import { getApi } from '../../utils/command.js';
 
 const list = new Command('list');
 
@@ -24,11 +21,7 @@ list
   .option('-s, --sort <order>', 'Sort', 'desc')
   .action(async () => {
     const { runId, loadId, severities, offset, limit, order } = list.opts();
-    const config = new Config();
-    const context = new Context(config.context);
-    const client = await step('Connecting to server', async () => {
-      return createClient(context);
-    });
+    const { step, output, client } = getApi(list);
     const logs = await step('Getting logs', async () => {
       return await client.logs.find.query({
         runId,
@@ -39,7 +32,7 @@ list
         order,
       });
     });
-    console.table(logs);
+    output(logs);
   });
 
 export { list };

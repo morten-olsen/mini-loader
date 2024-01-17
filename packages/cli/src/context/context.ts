@@ -2,6 +2,7 @@ import envPaths from 'env-paths';
 import { existsSync, readFileSync } from 'fs';
 import { mkdir, readdir, writeFile } from 'fs/promises';
 import { dirname, join } from 'path';
+import { Config } from '../config/config.js';
 
 type ContextValues = {
   host: string;
@@ -12,9 +13,8 @@ class Context {
   #location: string;
   #config?: ContextValues;
 
-  constructor(name: string) {
-    const paths = envPaths('mini-loader');
-    this.#location = join(paths.config, 'contexts', name);
+  constructor(config: Config) {
+    this.#location = join(config.location, 'contexts', config.context);
     if (existsSync(this.#location)) {
       this.#config = JSON.parse(readFileSync(this.#location, 'utf-8'));
     }
@@ -28,13 +28,13 @@ class Context {
     return this.#config?.token;
   }
 
-  public saveLogin = (host: string, token: string) => {
+  public saveLogin = async (host: string, token: string) => {
     this.#config = {
       ...(this.#config || {}),
       host,
       token,
     };
-    this.save();
+    await this.save();
   };
 
   public save = async () => {

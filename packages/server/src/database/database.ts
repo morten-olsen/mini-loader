@@ -1,5 +1,7 @@
 import knex, { Knex } from 'knex';
+import { Service, ContainerInstance } from 'typedi';
 
+import { Config } from '../config/config.js';
 import { source } from './migrations/migrations.source.js';
 import { mkdir } from 'fs/promises';
 import { dirname } from 'path';
@@ -8,13 +10,15 @@ const tableNames = {
   loads: 'loads',
 };
 
+@Service()
 class Database {
   #instance?: Promise<Knex>;
   #config: Knex.Config;
 
-  constructor(config: Knex.Config) {
+  constructor(container: ContainerInstance) {
+    const config = container.get(Config);
     this.#config = {
-      ...config,
+      ...config.database,
       migrations: {
         migrationSource: source,
       },

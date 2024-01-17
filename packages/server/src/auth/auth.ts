@@ -4,17 +4,21 @@ import { existsSync } from 'fs';
 import { mkdir, readFile, writeFile } from 'fs/promises';
 import jwt from 'jsonwebtoken';
 import { Config } from '../config/config.js';
+import { ContainerInstance, Service } from 'typedi';
 
 type AuthOptions = {
   config: Config;
 };
 
+@Service()
 class Auth {
   #options: AuthOptions;
   #data: Promise<{ secret: string }>;
 
-  constructor(options: AuthOptions) {
-    this.#options = options;
+  constructor(container: ContainerInstance) {
+    this.#options = {
+      config: container.get(Config),
+    };
     this.#data = this.#setup();
   }
 

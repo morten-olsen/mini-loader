@@ -1,9 +1,10 @@
-import { nanoid } from 'nanoid';
 import { EventEmitter } from 'eventemitter3';
 import { Database } from '../../database/database.js';
 import { CreateRunOptions, FindRunsOptions, UpdateRunOptions } from './runs.schemas.js';
 import { LoadRepo } from '../loads/loads.js';
 import { createHash } from 'crypto';
+import { ContainerInstance, Service } from 'typedi';
+import { IdGenerator } from '../../id/id.js';
 
 type RunRepoEvents = {
   created: (args: { id: string; loadId: string }) => void;
@@ -15,16 +16,21 @@ type RunRepoEvents = {
 type RunRepoOptions = {
   database: Database;
   loads: LoadRepo;
+  idGenerator: IdGenerator;
 };
 
+@Service()
 class RunRepo extends EventEmitter<RunRepoEvents> {
   #options: RunRepoOptions;
-  #isReady: Promise<void>;
+  #isSetup?: Promise<void>;
 
-  constructor(options: RunRepoOptions) {
+  constructor(container: ContainerInstance) {
     super();
-    this.#options = options;
-    this.#isReady = this.#setup();
+    this.#options = {
+      database: container.get(Database),
+      loads: container.get(LoadRepo),
+      idGenerator: container.get(IdGenerator),
+    };
   }
 
   #setup = async () => {
@@ -32,6 +38,13 @@ class RunRepo extends EventEmitter<RunRepoEvents> {
     const db = await database.instance;
     await db('runs').update({ status: 'failed', error: 'server was shut down' }).where({ status: 'running' });
   };
+
+  get #isReady() {
+    if (!this.#isSetup) {
+      this.#isSetup = this.#setup();
+    }
+    return this.#isSetup;
+  }
 
   public getById = async (id: string) => {
     await this.#isReady;
@@ -150,8 +163,8 @@ class RunRepo extends EventEmitter<RunRepoEvents> {
 
   public create = async (options: CreateRunOptions) => {
     await this.#isReady;
-    const { database, loads } = this.#options;
-    const id = nanoid();
+    const { database, loads, idGenerator } = this.#options;
+    const id = idGenerator.generate();
     const db = await database.instance;
 
     const script = await loads.getScript(options.loadId);

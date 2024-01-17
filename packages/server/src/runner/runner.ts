@@ -1,3 +1,4 @@
+import { ContainerInstance, Service } from 'typedi';
 import { Config } from '../config/config.js';
 import { Repos } from '../repos/repos.js';
 import { RunnerInstance } from './runner.instance.js';
@@ -7,13 +8,17 @@ type RunnerOptions = {
   config: Config;
 };
 
+@Service()
 class Runner {
   #options: RunnerOptions;
   #instances: Map<string, RunnerInstance> = new Map();
 
-  constructor(options: RunnerOptions) {
-    this.#options = options;
-    const { repos } = options;
+  constructor(container: ContainerInstance) {
+    this.#options = {
+      repos: container.get(Repos),
+      config: container.get(Config),
+    };
+    const { repos } = this.#options;
     repos.runs.on('created', this.#start);
   }
 

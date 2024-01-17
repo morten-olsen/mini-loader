@@ -1,10 +1,10 @@
 import { Command } from 'commander';
-import { Config } from '../../config/config.js';
+import { getApi } from '../../utils/command.js';
 
 const use = new Command('use');
 
 use.argument('<name>').action(async (name) => {
-  const config = new Config();
+  const { config } = getApi(use);
   await config.setContext(name);
 });
 

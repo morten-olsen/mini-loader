@@ -1,5 +1,4 @@
-import { Config } from '../config/config.js';
-import { Database } from '../database/database.js';
+import { ContainerInstance, Service } from 'typedi';
 import { ArtifactRepo } from './artifacts/artifacts.js';
 import { LoadRepo } from './loads/loads.js';
 import { LogRepo } from './logs/logs.js';
@@ -7,64 +6,36 @@ import { RunRepo } from './runs/runs.js';
 import { ScheduleRepo } from './schedules/schedules.js';
 import { SecretRepo } from './secrets/secrets.js';
 
-type ReposOptions = {
-  database: Database;
-  config: Config;
-};
-
+@Service()
 class Repos {
-  #loads: LoadRepo;
-  #runs: RunRepo;
-  #logs: LogRepo;
-  #artifacts: ArtifactRepo;
-  #secrets: SecretRepo;
-  #schedule: ScheduleRepo;
+  #container: ContainerInstance;
 
-  constructor({ database, config }: ReposOptions) {
-    this.#loads = new LoadRepo({
-      database,
-      config,
-    });
-    this.#runs = new RunRepo({
-      database,
-      loads: this.#loads,
-    });
-    this.#logs = new LogRepo({
-      database,
-    });
-    this.#artifacts = new ArtifactRepo({
-      database,
-    });
-    this.#secrets = new SecretRepo({
-      database,
-    });
-    this.#schedule = new ScheduleRepo({
-      database,
-    });
+  constructor(container: ContainerInstance) {
+    this.#container = container;
   }
 
   public get loads() {
-    return this.#loads;
+    return this.#container.get(LoadRepo);
   }
 
   public get runs() {
-    return this.#runs;
+    return this.#container.get(RunRepo);
   }
 
   public get logs() {
-    return this.#logs;
+    return this.#container.get(LogRepo);
   }
 
   public get artifacts() {
-    return this.#artifacts;
+    return this.#container.get(ArtifactRepo);
   }
 
   public get secrets() {
-    return this.#secrets;
+    return this.#container.get(SecretRepo);
   }
 
   public get schedules() {
-    return this.#schedule;
+    return this.#container.get(ScheduleRepo);
   }
 }
 

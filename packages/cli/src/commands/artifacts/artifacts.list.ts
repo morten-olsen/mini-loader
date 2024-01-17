@@ -1,8 +1,5 @@
 import { Command } from 'commander';
-import { createClient } from '../../client/client.js';
-import { step } from '../../utils/step.js';
-import { Context } from '../../context/context.js';
-import { Config } from '../../config/config.js';
+import { getApi } from '../../utils/command.js';
 
 const list = new Command('list');
 
@@ -22,11 +19,7 @@ list
   .option('-a, --limit <limit>', 'Limit', '1000')
   .action(async () => {
     const { runId, loadId, offset, limit } = list.opts();
-    const config = new Config();
-    const context = new Context(config.context);
-    const client = await step('Connecting to server', async () => {
-      return createClient(context);
-    });
+    const { step, client } = getApi(list);
     const artifacts = await step('Getting artifacts', async () => {
       return await client.artifacts.find.query({
         runId,
